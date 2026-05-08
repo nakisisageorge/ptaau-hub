@@ -9,9 +9,51 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as NewsRouteImport } from './routes/news'
+import { Route as MembershipRouteImport } from './routes/membership'
+import { Route as EventsRouteImport } from './routes/events'
+import { Route as CpdRouteImport } from './routes/cpd'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ResourcesRoute = ResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MembershipRoute = MembershipRouteImport.update({
+  id: '/membership',
+  path: '/membership',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CpdRoute = CpdRouteImport.update({
+  id: '/cpd',
+  path: '/cpd',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -26,31 +68,136 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/community': typeof CommunityRoute
+  '/contact': typeof ContactRoute
+  '/cpd': typeof CpdRoute
+  '/events': typeof EventsRoute
+  '/membership': typeof MembershipRoute
+  '/news': typeof NewsRoute
+  '/resources': typeof ResourcesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/community': typeof CommunityRoute
+  '/contact': typeof ContactRoute
+  '/cpd': typeof CpdRoute
+  '/events': typeof EventsRoute
+  '/membership': typeof MembershipRoute
+  '/news': typeof NewsRoute
+  '/resources': typeof ResourcesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/community': typeof CommunityRoute
+  '/contact': typeof ContactRoute
+  '/cpd': typeof CpdRoute
+  '/events': typeof EventsRoute
+  '/membership': typeof MembershipRoute
+  '/news': typeof NewsRoute
+  '/resources': typeof ResourcesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/community'
+    | '/contact'
+    | '/cpd'
+    | '/events'
+    | '/membership'
+    | '/news'
+    | '/resources'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to:
+    | '/'
+    | '/about'
+    | '/community'
+    | '/contact'
+    | '/cpd'
+    | '/events'
+    | '/membership'
+    | '/news'
+    | '/resources'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/community'
+    | '/contact'
+    | '/cpd'
+    | '/events'
+    | '/membership'
+    | '/news'
+    | '/resources'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  CommunityRoute: typeof CommunityRoute
+  ContactRoute: typeof ContactRoute
+  CpdRoute: typeof CpdRoute
+  EventsRoute: typeof EventsRoute
+  MembershipRoute: typeof MembershipRoute
+  NewsRoute: typeof NewsRoute
+  ResourcesRoute: typeof ResourcesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/resources': {
+      id: '/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/membership': {
+      id: '/membership'
+      path: '/membership'
+      fullPath: '/membership'
+      preLoaderRoute: typeof MembershipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cpd': {
+      id: '/cpd'
+      path: '/cpd'
+      fullPath: '/cpd'
+      preLoaderRoute: typeof CpdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -71,6 +218,13 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  CommunityRoute: CommunityRoute,
+  ContactRoute: ContactRoute,
+  CpdRoute: CpdRoute,
+  EventsRoute: EventsRoute,
+  MembershipRoute: MembershipRoute,
+  NewsRoute: NewsRoute,
+  ResourcesRoute: ResourcesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
