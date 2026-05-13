@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X, Pill } from "lucide-react";
+import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/PPAU_logo.jpeg";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -16,49 +17,99 @@ const nav = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-primary text-primary-foreground shadow-soft">
-            <Pill className="h-5 w-5" />
-          </span>
-          <span className="font-display text-lg font-bold tracking-tight">PTAAU</span>
-        </Link>
-        <nav className="hidden lg:flex items-center gap-1">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              className="px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-              activeProps={{ className: "px-3 py-2 text-sm font-semibold text-primary" }}
-              activeOptions={{ exact: n.to === "/" }}
-            >
-              {n.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="hidden lg:flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm"><Link to="/membership">Sign in</Link></Button>
-          <Button asChild size="sm" className="bg-gradient-primary"><Link to="/membership">Join PTAAU</Link></Button>
+    <header className="sticky top-0 z-50 w-full">
+      {/* Top bar */}
+      <div className="bg-primary text-white hidden lg:block">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8 flex items-center justify-between h-9 text-[11px]">
+          <span className="opacity-80">Advancing Pharmacy Professionals in Uganda</span>
+          <div className="flex items-center gap-6 opacity-80">
+            <span className="flex items-center gap-1.5">
+              <Phone className="h-3 w-3" /> +256 740 657759
+            </span>
+            <span>info@ptaau.org</span>
+          </div>
         </div>
-        <button className="lg:hidden p-2" onClick={() => setOpen(!open)} aria-label="Menu">
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
       </div>
-      {open && (
-        <div className="lg:hidden border-t border-border bg-background">
-          <div className="px-4 py-3 flex flex-col gap-1">
+
+      {/* Main nav */}
+      <div className="glass-navbar transition-all duration-300">
+        <div className="mx-auto flex h-20 max-w-7xl items-center px-4 lg:px-8">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3 shrink-0 group">
+            <img src={logo} alt="PTAAU Logo" className="h-12 w-auto" />
+            <div className="flex flex-col leading-none">
+              <span className="text-lg font-bold text-primary tracking-tight">PTAAU</span>
+              <span className="text-[10px] text-muted-foreground font-medium tracking-wide hidden sm:block">
+                Pharmacy Professionals Uganda
+              </span>
+            </div>
+          </Link>
+
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex items-center gap-0.5 ml-auto mr-6">
             {nav.map((n) => (
-              <Link key={n.to} to={n.to} onClick={() => setOpen(false)}
-                className="rounded-md px-3 py-2 text-sm font-medium hover:bg-muted">
+              <Link
+                key={n.to}
+                to={n.to}
+                className="px-3.5 py-2 text-[12px] font-medium text-foreground/70 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
+                activeProps={{ className: "text-primary font-semibold bg-primary/8" }}
+                activeOptions={{ exact: n.to === "/" }}
+              >
                 {n.label}
               </Link>
             ))}
-            <Button asChild className="mt-2 bg-gradient-primary"><Link to="/membership">Join PTAAU</Link></Button>
+          </nav>
+
+          {/* CTA */}
+          <div className="hidden lg:flex items-center gap-3 shrink-0">
+            <Button
+              asChild
+              className="bg-primary hover:bg-secondary text-white font-semibold px-6 h-10 rounded-full text-[12px] shadow-card transition-all"
+            >
+              <Link to="/membership">Join Now</Link>
+            </Button>
           </div>
+
+          {/* Mobile toggle */}
+          <button
+            className="ml-auto lg:hidden p-2 text-primary rounded-lg hover:bg-primary/5"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
-      )}
+
+        {/* Mobile menu */}
+        {open && (
+          <div className="lg:hidden border-t border-border bg-white animate-reveal">
+            <div className="px-4 py-5 flex flex-col gap-1">
+              {nav.map((n) => (
+                <Link
+                  key={n.to}
+                  to={n.to}
+                  onClick={() => setOpen(false)}
+                  className="rounded-xl px-4 py-3 text-sm font-medium text-foreground/70 hover:bg-primary/5 hover:text-primary transition-all"
+                  activeProps={{ className: "bg-primary/8 text-primary font-semibold" }}
+                  activeOptions={{ exact: n.to === "/" }}
+                >
+                  {n.label}
+                </Link>
+              ))}
+              <Button
+                asChild
+                className="mt-3 bg-primary rounded-xl h-12 font-semibold text-sm"
+              >
+                <Link to="/membership" onClick={() => setOpen(false)}>
+                  Join PTAAU
+                </Link>
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
     </header>
   );
 }

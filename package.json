@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
+    "build:cpanel": "BUILD_CPANEL=1 vite build && npm run zip:cpanel",
+    "zip:cpanel": "cd dist/client && rm -f ../../ptaau-hub-cpanel.zip && zip -r ../../ptaau-hub-cpanel.zip .",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",

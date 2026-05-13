@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero } from "@/components/site/PageHero";
 import { Button } from "@/components/ui/button";
-import { Check, Users, BookOpen, Megaphone, HeartHandshake } from "lucide-react";
+import { Check, Users, BookOpen, Megaphone, HeartHandshake, Star } from "lucide-react";
 
 export const Route = createFileRoute("/membership")({
   head: () => ({
     meta: [
-      { title: "Membership — Join PTAAU" },
+      { title: "Membership | Join PTAAU" },
       { name: "description", content: "Become a PTAAU member and access advocacy, CPD, networking, and recognition." },
       { property: "og:title", content: "PTAAU Membership" },
       { property: "og:description", content: "Professional and student membership for Uganda's pharmacy workforce." },
@@ -15,61 +15,134 @@ export const Route = createFileRoute("/membership")({
   component: Membership,
 });
 
-function Tier({ name, price, features, highlight }: { name: string; price: string; features: string[]; highlight?: boolean }) {
-  return (
-    <div className={`rounded-2xl border p-8 shadow-soft ${highlight ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}>
-      <h3 className="font-display text-2xl font-bold">{name}</h3>
-      <div className="mt-3 text-3xl font-bold">{price}</div>
-      <ul className="mt-6 space-y-3 text-sm">
-        {features.map(f => (
-          <li key={f} className="flex gap-2"><Check className={`h-5 w-5 shrink-0 ${highlight ? "text-white" : "text-secondary"}`} /> {f}</li>
-        ))}
-      </ul>
-      <Button asChild className={`mt-8 w-full ${highlight ? "bg-white text-primary hover:bg-white/90" : ""}`}>
-        <Link to="/contact">Apply</Link>
-      </Button>
-    </div>
-  );
-}
-
 function Membership() {
   return (
     <>
-      <PageHero eyebrow="Membership" title="Become a PTAAU Member"
-        subtitle="Join Uganda's leading professional community for pharmacy technicians and assistants." />
+      <PageHero
+        eyebrow="Membership"
+        title="Become a PTAAU Member"
+        subtitle="Join Uganda's leading professional community for pharmacy technicians and assistants."
+      />
 
-      <section className="mx-auto max-w-7xl px-4 lg:px-8 py-20 grid gap-8 md:grid-cols-2">
-        <Tier name="Professional Membership" price="Annual subscription" highlight
-              features={["Full advocacy & representation","Discounted CPD/CME courses","Member-only events","Recognition & certification","Committee participation"]} />
-        <Tier name="Student Membership" price="Free"
-              features={["Educational opportunities","Mentorship access","Career resources","Student events","Pathway to professional membership"]} />
+      <section aria-labelledby="membership-options-heading" className="section-padding bg-background">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="section-label">Choose Your Plan</span>
+            <h2 id="membership-options-heading" className="text-3xl font-bold text-foreground">
+              Membership Options
+            </h2>
+          </div>
+          <div className="grid gap-8 md:grid-cols-2 max-w-3xl mx-auto">
+            {/* Professional */}
+            <div className="bg-gradient-primary rounded-2xl p-8 text-white shadow-elegant relative overflow-hidden">
+              <div className="absolute top-4 right-4 bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                Most Popular
+              </div>
+              <div className="icon-box bg-white/20 mb-5">
+                <Star className="h-5 w-5 text-white" aria-hidden="true" />
+              </div>
+              <h3 className="text-2xl font-bold mb-1">Professional Membership</h3>
+              <div className="text-white/70 text-sm mb-6">Annual subscription</div>
+              <ul className="space-y-3 mb-8" aria-label="Professional membership features">
+                {[
+                  "Full advocacy and representation",
+                  "Discounted CPD/CME courses",
+                  "Member-only events",
+                  "Recognition and certification",
+                  "Committee participation",
+                ].map((f) => (
+                  <li key={f} className="flex items-center gap-3 text-sm">
+                    <Check className="h-4 w-4 text-white shrink-0" aria-hidden="true" /> {f}
+                  </li>
+                ))}
+              </ul>
+              <Button
+                asChild
+                className="w-full bg-white text-primary hover:bg-white/90 font-semibold rounded-full h-11"
+              >
+                <Link to="/contact">Apply Now</Link>
+              </Button>
+            </div>
+
+            {/* Student */}
+            <div className="bg-white rounded-2xl border border-border p-8 shadow-soft">
+              <div className="icon-box mb-5">
+                <BookOpen className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <h3 className="text-2xl font-bold text-foreground mb-1">Student Membership</h3>
+              <div className="text-primary font-bold text-xl mb-6">Free</div>
+              <ul className="space-y-3 mb-8" aria-label="Student membership features">
+                {[
+                  "Educational opportunities",
+                  "Mentorship access",
+                  "Career resources",
+                  "Student events",
+                  "Pathway to professional membership",
+                ].map((f) => (
+                  <li key={f} className="flex items-center gap-3 text-sm text-foreground/80">
+                    <Check className="h-4 w-4 text-primary shrink-0" aria-hidden="true" /> {f}
+                  </li>
+                ))}
+              </ul>
+              <Button
+                asChild
+                variant="outline"
+                className="w-full border-primary text-primary hover:bg-primary hover:text-white font-semibold rounded-full h-11"
+              >
+                <Link to="/contact">Register Free</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section className="bg-muted/40 py-20">
+      {/* Benefits */}
+      <section aria-labelledby="benefits-heading" className="bg-white py-20">
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <h2 className="font-display text-3xl font-bold text-center">Member Benefits</h2>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="text-center mb-12">
+            <span className="section-label">Why Join</span>
+            <h2 id="benefits-heading" className="text-3xl font-bold text-foreground">
+              Member Benefits
+            </h2>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { i: Users, t: "Networking", d: "Connect with peers across Uganda." },
-              { i: Megaphone, t: "Advocacy", d: "A national voice for your profession." },
-              { i: BookOpen, t: "CPD Access", d: "Continuous learning made accessible." },
-              { i: HeartHandshake, t: "Recognition", d: "Be celebrated for your impact." },
-            ].map(b => (
-              <div key={b.t} className="rounded-2xl border border-border bg-card p-6 text-center shadow-soft">
-                <b.i className="mx-auto h-7 w-7 text-primary" />
-                <h3 className="mt-3 font-display font-semibold">{b.t}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{b.d}</p>
+              { i: Users, t: "Networking", d: "Connect with peers across Uganda and build lasting professional relationships." },
+              { i: Megaphone, t: "Advocacy", d: "A national voice for your profession in policy and regulatory discussions." },
+              { i: BookOpen, t: "CPD Access", d: "Continuous learning made accessible with accredited courses and workshops." },
+              { i: HeartHandshake, t: "Recognition", d: "Be celebrated for your impact and contributions to pharmacy in Uganda." },
+            ].map((b) => (
+              <div
+                key={b.t}
+                className="bg-background rounded-2xl border border-border p-6 shadow-soft card-hover text-center"
+              >
+                <div className="icon-box mx-auto mb-4">
+                  <b.i className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <h3 className="font-bold text-foreground mb-2">{b.t}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{b.d}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 lg:px-8 py-20">
-        <div className="rounded-3xl bg-gradient-primary p-12 text-center text-primary-foreground shadow-elegant">
-          <h2 className="font-display text-3xl font-bold">Ready to take the next step?</h2>
-          <p className="mt-3 text-white/85">Volunteer, sponsor, or join a committee to shape pharmacy in Uganda.</p>
-          <Button asChild size="lg" className="mt-6 bg-white text-primary hover:bg-white/90"><Link to="/contact">Get involved</Link></Button>
+      {/* CTA */}
+      <section className="section-padding bg-background">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+          <div className="bg-gradient-primary rounded-2xl p-12 text-center text-white shadow-elegant">
+            <h2 className="text-3xl font-bold mb-3">Ready to Take the Next Step?</h2>
+            <p className="text-white/80 mb-8 max-w-lg mx-auto">
+              Volunteer, sponsor, or join a committee to shape pharmacy in Uganda.
+            </p>
+            <Button
+              asChild
+              size="lg"
+              className="bg-white text-primary hover:bg-white/90 font-semibold rounded-full px-10 h-12"
+            >
+              <Link to="/contact">Get Involved</Link>
+            </Button>
+          </div>
         </div>
       </section>
     </>

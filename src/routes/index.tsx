@@ -1,24 +1,66 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import {
-  GraduationCap, Megaphone, Stethoscope, Users, ArrowRight, Calendar, MapPin,
-  Award, BookOpen, Heart, Sparkles, TrendingUp, Star,
+  GraduationCap,
+  Megaphone,
+  Stethoscope,
+  Users,
+  ArrowRight,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  CheckCircle2,
+  Star,
+  BookOpen,
+  Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroImg from "@/assets/hero-pharmacy.jpg";
-import chairImg from "@/assets/chairperson.jpg";
+import heroImg1 from "@/assets/hero-pharmacy.jpg";
+import heroImg2 from "@/assets/hero-pharmacy-2.jpg";
+import heroImg3 from "@/assets/hero-pharmacy-3.jpg";
+import slider1 from "@/assets/slider 1.jpg";
+import whoWeAreImg from "@/assets/who-we-are.jpg";
+import presidentImg from "@/assets/president.jpeg";
+import vicePresidentImg from "@/assets/vice-president.jpeg";
+import secretaryImg from "@/assets/secretary.jpeg";
+import treasurerImg from "@/assets/treasurer.jpeg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PTAAU — Advancing Pharmacy Professionals in Uganda" },
-      { name: "description", content: "Empowering Uganda's pharmacy technicians and assistants through advocacy, education, and professional excellence." },
-      { property: "og:title", content: "PTAAU — Advancing Pharmacy Professionals in Uganda" },
-      { property: "og:description", content: "Join the leading professional association for pharmacy technicians & assistants in Uganda." },
+      { title: "PTAAU | Advancing Pharmacy Professionals in Uganda" },
+      {
+        name: "description",
+        content:
+          "Empowering Uganda's pharmacy technicians and assistants through advocacy, education, and professional excellence.",
+      },
+      { property: "og:title", content: "PTAAU | Advancing Pharmacy Professionals in Uganda" },
+      { property: "og:description", content: "The premier professional body for Pharmacy Technicians and Assistants in Uganda." },
     ],
   }),
   component: Home,
 });
+
+const heroSlides = [
+  {
+    image: slider1,
+    title: "Taking Care of Your Health is Our Top Priority",
+    description:
+      "The premier professional body for Pharmacy Technicians and Assistants, dedicated to fostering healthcare excellence across Uganda.",
+  },
+  {
+    image: heroImg3,
+    title: "Professional Excellence and Advocacy",
+    description:
+      "Your home for continuing professional development and collaborative growth in pharmacy practice.",
+  },
+  {
+    image: heroImg1,
+    title: "Advancing Pharmacy Professionals in Uganda",
+    description:
+      "Empowering Pharmacy Technicians and Assistants through advocacy, education, and professional excellence.",
+  },
+];
 
 function useCounter(target: number, run: boolean, duration = 1500) {
   const [v, setV] = useState(0);
@@ -37,19 +79,25 @@ function useCounter(target: number, run: boolean, duration = 1500) {
   return v;
 }
 
-function Stat({ value, label, icon: Icon, run }: { value: number; label: string; icon: any; run: boolean }) {
+function StatCard({
+  value,
+  suffix = "+",
+  label,
+  run,
+}: {
+  value: number;
+  suffix?: string;
+  label: string;
+  run: boolean;
+}) {
   const n = useCounter(value, run);
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 shadow-soft hover:shadow-elegant transition-shadow">
-      <div className="flex items-center gap-3">
-        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-soft text-primary">
-          <Icon className="h-5 w-5" />
-        </span>
-        <div>
-          <div className="font-display text-3xl font-bold text-primary">{n.toLocaleString()}+</div>
-          <div className="text-sm text-muted-foreground">{label}</div>
-        </div>
+    <div className="text-center px-4">
+      <div className="text-4xl font-bold text-white mb-1">
+        {n.toLocaleString()}
+        {suffix}
       </div>
+      <div className="text-sm text-white/75 font-medium">{label}</div>
     </div>
   );
 }
@@ -57,112 +105,307 @@ function Stat({ value, label, icon: Icon, run }: { value: number; label: string;
 function Home() {
   const statsRef = useRef<HTMLDivElement>(null);
   const [run, setRun] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
   useEffect(() => {
     const el = statsRef.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => e.isIntersecting && setRun(true), { threshold: 0.3 });
+    const obs = new IntersectionObserver(
+      ([e]) => e.isIntersecting && setRun(true),
+      { threshold: 0.3 }
+    );
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () =>
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  const prevSlide = () =>
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden">
-        <img src={heroImg} alt="Pharmacy professionals at work" width={1920} height={1080}
-             className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-hero" />
-        <div className="relative mx-auto max-w-7xl px-4 lg:px-8 py-24 md:py-32 lg:py-40 text-primary-foreground">
-          <div className="max-w-3xl animate-fade-up">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" /> Officially recognized professional body
-            </span>
-            <h1 className="mt-5 font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1]">
-              Advancing Pharmacy <br className="hidden md:block" />
-              Professionals in Uganda
-            </h1>
-            <p className="mt-5 text-lg md:text-xl text-white/85 max-w-2xl">
-              Empowering Pharmacy Technicians and Assistants through advocacy, education,
-              collaboration, and professional excellence.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
-                <Link to="/membership">Join PTAAU <ArrowRight className="ml-1 h-4 w-4" /></Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20">
-                <Link to="/cpd">Explore CPD/CME</Link>
-              </Button>
+      <section
+        aria-label="Hero slideshow"
+        className="relative h-[88vh] min-h-[620px] lg:h-[calc(88vh-40px)] overflow-hidden"
+      >
+        {heroSlides.map((slide, idx) => (
+          <div
+            key={idx}
+            aria-hidden={idx !== currentSlide}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              idx === currentSlide ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <img
+              src={slide.image}
+              alt=""
+              role="presentation"
+              className="absolute inset-0 h-full w-full object-cover"
+              loading={idx === 0 ? "eager" : "lazy"}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+            <div className="relative mx-auto h-full max-w-7xl px-4 lg:pl-8 lg:pr-0 flex items-center justify-center lg:justify-start">
+              <div className="max-w-2xl animate-reveal">
+                <span className="section-label bg-primary/80 text-white border-0 mb-6">
+                  PTAAU Official Body
+                </span>
+                <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
+                  {slide.title}
+                </h1>
+                <p className="text-lg text-white/80 leading-relaxed mb-10 max-w-xl">
+                  {slide.description}
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-primary hover:bg-secondary text-white font-semibold px-8 rounded-full shadow-card transition-all text-sm"
+                  >
+                    <Link to="/membership">Become a Member</Link>
+                  </Button>
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="border-white/40 bg-white/10 text-white hover:bg-white hover:text-primary font-semibold px-8 rounded-full backdrop-blur-sm transition-all text-sm"
+                  >
+                    <Link to="/about">Learn More</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {/* Slide indicators */}
+        <div
+          role="tablist"
+          aria-label="Slide navigation"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 z-20"
+        >
+          {heroSlides.map((_, i) => (
+            <button
+              key={i}
+              role="tab"
+              aria-selected={i === currentSlide}
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => setCurrentSlide(i)}
+              className={`rounded-full transition-all ${
+                i === currentSlide ? "w-8 h-2.5 bg-primary" : "w-2.5 h-2.5 bg-white/40"
+              }`}
+            />
+          ))}
+        </div>
+
+        <div className="absolute bottom-6 right-4 lg:right-8 flex gap-2 z-20">
+          <button
+            onClick={prevSlide}
+            aria-label="Previous slide"
+            className="w-11 h-11 flex items-center justify-center rounded-full bg-white/15 text-white hover:bg-primary backdrop-blur-sm transition-all"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            onClick={nextSlide}
+            aria-label="Next slide"
+            className="w-11 h-11 flex items-center justify-center rounded-full bg-white/15 text-white hover:bg-primary backdrop-blur-sm transition-all"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        </div>
+      </section>
+
+      {/* QUICK SERVICES STRIP */}
+      <section aria-label="Our services" className="bg-white shadow-premium relative z-10">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border">
+            {[
+              { icon: GraduationCap, title: "CPD / CME", desc: "Accredited courses", to: "/cpd" },
+              { icon: Megaphone, title: "Advocacy", desc: "Professional representation", to: "/about" },
+              { icon: Users, title: "Membership", desc: "Join our community", to: "/membership" },
+              { icon: Calendar, title: "Events", desc: "Upcoming activities", to: "/events" },
+            ].map((item) => (
+              <Link
+                key={item.title}
+                to={item.to}
+                className="flex items-center gap-4 px-6 py-6 hover:bg-primary/4 transition-colors group"
+              >
+                <div className="icon-box group-hover:scale-105 transition-transform shrink-0">
+                  <item.icon className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <div>
+                  <div className="font-semibold text-sm text-foreground">{item.title}</div>
+                  <div className="text-xs text-muted-foreground">{item.desc}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* WHO WE ARE */}
+      <section aria-labelledby="who-we-are-heading" className="section-padding bg-background">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+          <div className="grid gap-16 lg:grid-cols-2 items-center">
+            <div className="relative animate-reveal order-2 lg:order-1">
+              <img
+                src={whoWeAreImg}
+                alt="PTAAU pharmacy professionals at work"
+                loading="lazy"
+                width={800}
+                height={480}
+                className="rounded-2xl object-cover w-full h-[480px] shadow-elegant"
+              />
+              <div className="absolute -bottom-6 -right-4 md:-right-8 bg-white rounded-2xl p-5 shadow-elegant border border-border">
+                <div className="flex items-center gap-3">
+                  <div className="icon-box w-12 h-12 rounded-xl">
+                    <Award className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-primary leading-none">10k+</div>
+                    <div className="text-xs text-muted-foreground font-medium mt-0.5">
+                      Members Represented
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="animate-reveal order-1 lg:order-2">
+              <span className="section-label">Who We Are</span>
+              <h2
+                id="who-we-are-heading"
+                className="text-4xl font-bold text-foreground mb-5 leading-tight"
+              >
+                Welcome To PTAAU, Uganda's Pharmacy Body
+              </h2>
+              <p className="text-muted-foreground text-base leading-relaxed mb-6">
+                The Pharmacy Technicians and Assistants' Association of Uganda (PTAAU) is the premier
+                professional body dedicated to fostering excellence, advocacy, and continuous learning
+                for pharmacy professionals across the nation.
+              </p>
+              <ul className="space-y-3 mb-8" aria-label="Key highlights">
+                {[
+                  "Recognized under the Allied Health Professionals' Council",
+                  "Advocating for fair licensing and professional standards",
+                  "Delivering accredited CPD/CME programs nationwide",
+                  "Building a vibrant community of pharmacy professionals",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" aria-hidden="true" />
+                    <span className="text-sm text-foreground/80">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                <div className="bg-primary-soft rounded-xl p-4">
+                  <h3 className="font-semibold text-primary text-sm mb-1">Our Mission</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Uplifting standards of practice and ensuring effective pharmaceutical care for all Ugandans.
+                  </p>
+                </div>
+                <div className="bg-primary-soft rounded-xl p-4">
+                  <h3 className="font-semibold text-primary text-sm mb-1">Our Vision</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    A vibrant platform for pharmacy professionals to grow and contribute to healthcare.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button
+                  asChild
+                  className="bg-primary hover:bg-secondary text-white rounded-full px-7 h-11 text-sm font-semibold"
+                >
+                  <Link to="/about">About PTAAU</Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary hover:text-white rounded-full px-7 h-11 text-sm font-semibold"
+                >
+                  <Link to="/membership">Join Us</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* STATS */}
-      <section ref={statsRef} className="mx-auto max-w-7xl px-4 lg:px-8 -mt-12 relative z-10">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <Stat value={1800} label="Pharmacy Technicians" icon={Stethoscope} run={run} />
-          <Stat value={255} label="Pharmacy Assistants" icon={Users} run={run} />
-          <Stat value={3096} label="Pharmacies" icon={Heart} run={run} />
-          <Stat value={11370} label="Drug Shops" icon={MapPin} run={run} />
-        </div>
-      </section>
-
-      {/* CHAIR MESSAGE */}
-      <section className="mx-auto max-w-7xl px-4 lg:px-8 py-24">
-        <div className="grid gap-10 lg:grid-cols-5 items-center">
-          <div className="lg:col-span-2">
-            <div className="relative">
-              <img src={chairImg} alt="PTAAU Chairperson" loading="lazy" width={800} height={1024}
-                   className="rounded-2xl object-cover w-full shadow-elegant" />
-              <div className="absolute -bottom-5 -right-5 rounded-xl bg-card p-4 shadow-elegant border border-border hidden md:block">
-                <div className="text-xs text-muted-foreground">Chairperson</div>
-                <div className="font-semibold">PTAAU Executive</div>
-              </div>
-            </div>
-          </div>
-          <div className="lg:col-span-3">
-            <span className="text-sm font-semibold uppercase tracking-wider text-secondary">Welcome Message</span>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl font-bold">A Word from the Chairperson</h2>
-            <p className="mt-4 text-muted-foreground leading-relaxed">
-              On behalf of the Pharmacy Technicians and Assistants' Association of Uganda, I welcome you to
-              our professional home. Together we are shaping the future of pharmacy practice — uplifting standards,
-              expanding access to medicines, and supporting every member's growth.
-            </p>
-            <p className="mt-4 text-muted-foreground leading-relaxed">
-              We invite you to join, learn, advocate, and contribute as we strengthen pharmaceutical healthcare
-              delivery for every Ugandan community.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild><Link to="/about">About PTAAU</Link></Button>
-              <Button asChild variant="outline"><Link to="/membership">Become a Member</Link></Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* MANDATE */}
-      <section className="bg-muted/40 py-24">
+      <section
+        ref={statsRef}
+        aria-label="Key statistics"
+        className="bg-gradient-primary text-white py-16"
+      >
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-sm font-semibold uppercase tracking-wider text-secondary">Our Mandate</span>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl font-bold">What We Stand For</h2>
-            <p className="mt-3 text-muted-foreground">Four pillars guiding our work for Uganda's pharmacy workforce.</p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 divide-x divide-white/20">
+            <StatCard value={1800} label="Pharmacy Technicians" run={run} />
+            <StatCard value={255} label="Pharmacy Assistants" run={run} />
+            <StatCard value={3096} label="Registered Pharmacies" run={run} />
+            <StatCard value={11370} label="Licensed Drug Shops" run={run} />
           </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        </div>
+      </section>
+
+      {/* WHAT WE STAND FOR */}
+      <section aria-labelledby="mandate-heading" className="section-padding bg-white">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-14 animate-reveal">
+            <span className="section-label">Our Mandate</span>
+            <h2 id="mandate-heading" className="text-4xl font-bold text-foreground mb-4">
+              Find Out More About Our Services
+            </h2>
+            <p className="text-muted-foreground">
+              Four pillars guiding our work for Uganda's pharmacy workforce.
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: GraduationCap, title: "Continuing Professional Development", desc: "CPD/CME programs that keep members at the forefront of pharmacy practice." },
-              { icon: Megaphone, title: "Professional Advocacy", desc: "Voice and representation for pharmacy technicians and assistants nationwide." },
-              { icon: Stethoscope, title: "Pharmacy Practice", desc: "Promoting safe, ethical, and patient-centered pharmaceutical care." },
-              { icon: Users, title: "Networking Opportunities", desc: "A vibrant community for collaboration, mentorship, and growth." },
+              {
+                icon: GraduationCap,
+                title: "Continuing Education",
+                desc: "CPD/CME programs that keep members at the forefront of pharmacy practice.",
+              },
+              {
+                icon: Megaphone,
+                title: "Advocacy",
+                desc: "Expert guidance and representation for pharmacy technicians nationwide.",
+              },
+              {
+                icon: Stethoscope,
+                title: "Professional Standards",
+                desc: "Promoting safe, ethical, and collaborative pharmacy environments.",
+              },
+              {
+                icon: Users,
+                title: "Member Community",
+                desc: "Vibrant community for collaboration, networking, and career growth.",
+              },
             ].map((c) => (
-              <div key={c.title} className="group rounded-2xl border border-border bg-card p-6 shadow-soft hover:-translate-y-1 hover:shadow-elegant transition-all">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground">
-                  <c.icon className="h-6 w-6" />
+              <div
+                key={c.title}
+                className="group bg-white rounded-2xl border border-border p-7 shadow-soft card-hover text-center"
+              >
+                <div className="icon-box mx-auto mb-5 group-hover:scale-110 transition-transform">
+                  <c.icon className="h-6 w-6" aria-hidden="true" />
                 </div>
-                <h3 className="mt-5 font-display text-lg font-semibold">{c.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
-                <Link to="/about" className="mt-4 inline-flex items-center text-sm font-medium text-primary group-hover:gap-2 gap-1 transition-all">
-                  Read more <ArrowRight className="h-4 w-4" />
+                <h3 className="font-bold text-foreground mb-3 text-base">{c.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-5">{c.desc}</p>
+                <Link
+                  to="/about"
+                  className="inline-flex items-center gap-1.5 text-primary text-xs font-semibold hover:gap-2.5 transition-all"
+                  aria-label={`Read more about ${c.title}`}
+                >
+                  Read more <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                 </Link>
               </div>
             ))}
@@ -170,122 +413,178 @@ function Home() {
         </div>
       </section>
 
-      {/* EVENTS */}
-      <section className="mx-auto max-w-7xl px-4 lg:px-8 py-24">
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
-          <div>
-            <span className="text-sm font-semibold uppercase tracking-wider text-secondary">Events</span>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl font-bold">Upcoming Events</h2>
-          </div>
-          <Button asChild variant="outline"><Link to="/events">View all</Link></Button>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {[
-            { title: "Pharmacy Week 2026", date: "Sep 22", month: "2026", loc: "Kampala Serena Hotel", tag: "Flagship" },
-            { title: "Sickle Cell Awareness Day", date: "Jun 19", month: "2026", loc: "Mulago National Hospital", tag: "Public Health" },
-            { title: "CPD Session: Antimicrobial Stewardship", date: "Jul 12", month: "2026", loc: "Online", tag: "CPD" },
-          ].map((e) => (
-            <article key={e.title} className="group rounded-2xl border border-border bg-card overflow-hidden shadow-soft hover:shadow-elegant transition-all">
-              <div className="bg-gradient-primary px-6 py-8 text-primary-foreground flex items-center justify-between">
-                <div>
-                  <div className="text-3xl font-display font-bold">{e.date}</div>
-                  <div className="text-sm opacity-80">{e.month}</div>
-                </div>
-                <span className="text-xs uppercase tracking-wider bg-white/20 px-2 py-1 rounded-full">{e.tag}</span>
-              </div>
-              <div className="p-6">
-                <h3 className="font-display text-lg font-semibold">{e.title}</h3>
-                <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
-                  <MapPin className="h-4 w-4 text-primary" /> {e.loc}
-                </div>
-                <Button asChild size="sm" className="mt-5 w-full"><Link to="/events">Register</Link></Button>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* WHY JOIN */}
-      <section className="bg-secondary-soft py-24">
+      {/* HOW WE WORK */}
+      <section aria-labelledby="process-heading" className="section-padding bg-background">
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-sm font-semibold uppercase tracking-wider text-secondary">Why Join Us</span>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl font-bold">Benefits of Membership</h2>
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <span className="section-label">Our Process</span>
+            <h2 id="process-heading" className="text-4xl font-bold text-foreground mb-4">
+              How We Work
+            </h2>
           </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-8 md:grid-cols-3">
             {[
-              { icon: TrendingUp, title: "Professional Growth" },
-              { icon: Megaphone, title: "Advocacy & Recognition" },
-              { icon: Users, title: "Community Connection" },
-              { icon: Award, title: "Industry Opportunities" },
-            ].map((b) => (
-              <div key={b.title} className="rounded-2xl bg-card p-6 text-center shadow-soft hover:-translate-y-1 transition-transform">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-primary text-primary-foreground">
-                  <b.icon className="h-6 w-6" />
+              {
+                step: "01",
+                icon: Users,
+                title: "Join as a Member",
+                desc: "Register as a pharmacy technician or assistant and become part of Uganda's leading professional body.",
+              },
+              {
+                step: "02",
+                icon: BookOpen,
+                title: "Access CPD Resources",
+                desc: "Unlock accredited continuing education courses, workshops, and professional development materials.",
+              },
+              {
+                step: "03",
+                icon: Award,
+                title: "Grow Your Career",
+                desc: "Gain recognition, network with peers, and advance your pharmacy career with PTAAU's support.",
+              },
+            ].map((item) => (
+              <div
+                key={item.step}
+                className="relative bg-white rounded-2xl border border-border p-8 shadow-soft card-hover"
+              >
+                <div
+                  className="text-6xl font-black text-primary/8 absolute top-4 right-6 leading-none select-none"
+                  aria-hidden="true"
+                >
+                  {item.step}
                 </div>
-                <h3 className="mt-5 font-display font-semibold">{b.title}</h3>
+                <div className="icon-box mb-5">
+                  <item.icon className="h-6 w-6" aria-hidden="true" />
+                </div>
+                <h3 className="font-bold text-foreground mb-3">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* COURSES */}
-      <section className="mx-auto max-w-7xl px-4 lg:px-8 py-24">
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
-          <div>
-            <span className="text-sm font-semibold uppercase tracking-wider text-secondary">CPD / CME</span>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl font-bold">Featured Courses</h2>
+      {/* LEADERSHIP HIGHLIGHT */}
+      <section aria-labelledby="leadership-heading" className="section-padding bg-white">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+          <div className="flex flex-wrap items-end justify-between gap-6 mb-12">
+            <div>
+              <span className="section-label">Leadership</span>
+              <h2 id="leadership-heading" className="text-4xl font-bold text-foreground">
+                Our Leaders
+              </h2>
+            </div>
+            <Button
+              asChild
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary hover:text-white rounded-full px-7 h-10 text-sm font-semibold"
+            >
+              <Link to="/about">View All</Link>
+            </Button>
           </div>
-          <Button asChild variant="outline"><Link to="/cpd">Browse catalog</Link></Button>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {[
-            { t: "Rational Use of Antibiotics", i: "Dr. A. Mugisha", p: "UGX 50,000", r: 4.9 },
-            { t: "Pharmacovigilance Essentials", i: "Dr. R. Nankabirwa", p: "UGX 75,000", r: 4.8 },
-            { t: "Patient Counseling Skills", i: "Dr. J. Okello", p: "Free", r: 4.7 },
-          ].map((c) => (
-            <article key={c.t} className="rounded-2xl border border-border bg-card overflow-hidden shadow-soft hover:shadow-elegant transition-all">
-              <div className="aspect-video bg-gradient-primary flex items-center justify-center">
-                <BookOpen className="h-12 w-12 text-primary-foreground/80" />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-1 text-sm text-secondary">
-                  <Star className="h-4 w-4 fill-current" /> {c.r}
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { name: "Mr. Danson Sembatya", role: "President", img: presidentImg },
+              { name: "KHAUKHA M.A EMMANUEL", role: "Vice President", img: vicePresidentImg },
+              { name: "GWEBAYANGA COLLINE", role: "Secretary", img: secretaryImg },
+              { name: "Boonabaana Bernard", role: "National Treasurer", img: treasurerImg },
+            ].map((p) => (
+              <div
+                key={p.name}
+                className="group bg-white rounded-2xl border border-border overflow-hidden shadow-soft card-hover text-center"
+              >
+                <div className="h-48 overflow-hidden bg-primary-soft">
+                  <img
+                    src={p.img}
+                    alt={`${p.name}, ${p.role}`}
+                    loading="lazy"
+                    className="h-full w-full object-contain object-center group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
-                <h3 className="mt-2 font-display text-lg font-semibold">{c.t}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">By {c.i}</p>
-                <div className="mt-5 flex items-center justify-between">
-                  <span className="font-semibold text-primary">{c.p}</span>
-                  <Button asChild size="sm"><Link to="/cpd">Enroll</Link></Button>
+                <div className="p-5">
+                  <h3 className="font-bold text-foreground text-sm mb-1">{p.name}</h3>
+                  <p className="text-xs text-primary font-medium">{p.role}</p>
+                  <div className="flex justify-center gap-1 mt-3" aria-hidden="true">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-3 w-3 fill-primary text-primary" />
+                    ))}
+                  </div>
                 </div>
               </div>
-            </article>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* NEWS */}
-      <section className="bg-muted/40 py-24">
+      {/* LATEST NEWS */}
+      <section aria-labelledby="news-heading" className="section-padding bg-background">
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
+          <div className="flex flex-wrap items-end justify-between gap-6 mb-12">
             <div>
-              <span className="text-sm font-semibold uppercase tracking-wider text-secondary">Latest News</span>
-              <h2 className="mt-2 font-display text-3xl md:text-4xl font-bold">From the Association</h2>
+              <span className="section-label">Latest Updates</span>
+              <h2 id="news-heading" className="text-4xl font-bold text-foreground">
+                Latest Blogs and Articles
+              </h2>
             </div>
-            <Button asChild variant="outline"><Link to="/news">All articles</Link></Button>
+            <Button
+              asChild
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary hover:text-white rounded-full px-7 h-10 text-sm font-semibold"
+            >
+              <Link to="/news">All Articles</Link>
+            </Button>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {[
-              { tag: "Advocacy", title: "PTAAU advances scope-of-practice review with the Allied Health Professionals' Council", date: "Apr 28, 2026" },
-              { tag: "Public Health", title: "World Pharmacist Day: technicians at the heart of medication safety", date: "Apr 12, 2026" },
-              { tag: "Education", title: "New CPD curriculum launched for community pharmacy assistants", date: "Mar 30, 2026" },
+              {
+                tag: "Advocacy",
+                title: "PTAAU advances scope-of-practice review with the Allied Health Professionals Council.",
+                date: "April 28, 2026",
+                img: heroImg2,
+              },
+              {
+                tag: "Public Health",
+                title: "World Pharmacist Day: technicians at the heart of medication safety and healthcare.",
+                date: "April 12, 2026",
+                img: heroImg1,
+              },
+              {
+                tag: "Policy",
+                title: "Allied Health Drug Dispensaries: A Turning Point in the Fight Against AMR in Uganda.",
+                date: "May 9, 2026",
+                img: heroImg3,
+              },
             ].map((n) => (
-              <article key={n.title} className="rounded-2xl border border-border bg-card p-6 shadow-soft hover:shadow-elegant transition-all">
-                <span className="inline-block rounded-full bg-primary-soft px-3 py-1 text-xs font-medium text-primary">{n.tag}</span>
-                <h3 className="mt-4 font-display text-lg font-semibold leading-snug">{n.title}</h3>
-                <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-                  <Calendar className="h-4 w-4" /> {n.date}
+              <article
+                key={n.title}
+                className="group bg-white rounded-2xl border border-border overflow-hidden shadow-soft card-hover"
+              >
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={n.img}
+                    alt={n.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <span className="absolute top-4 left-4 bg-primary text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                    {n.tag}
+                  </span>
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+                    <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
+                    <time>{n.date}</time>
+                  </div>
+                  <h3 className="font-bold text-foreground text-sm leading-snug mb-4 group-hover:text-primary transition-colors line-clamp-3">
+                    {n.title}
+                  </h3>
+                  <Link
+                    to="/news"
+                    className="inline-flex items-center gap-1.5 text-primary text-xs font-semibold hover:gap-2.5 transition-all"
+                    aria-label={`Read more about: ${n.title}`}
+                  >
+                    Read more <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </Link>
                 </div>
               </article>
             ))}
@@ -293,17 +592,65 @@ function Home() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="mx-auto max-w-7xl px-4 lg:px-8 py-24">
-        <div className="rounded-3xl bg-gradient-primary px-6 py-16 md:px-16 text-primary-foreground text-center shadow-elegant">
-          <h2 className="font-display text-3xl md:text-4xl font-bold">Become a PTAAU Member Today</h2>
-          <p className="mt-3 text-white/85 max-w-xl mx-auto">
-            Join thousands of pharmacy professionals shaping Uganda's healthcare future.
+      {/* PARTNERS */}
+      <section aria-label="Collaborating partners" className="bg-white border-t border-border py-14">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+          <p className="text-center text-xs font-bold text-muted-foreground/50 uppercase tracking-[0.3em] mb-10">
+            Collaborating Partners
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90"><Link to="/membership">Join now</Link></Button>
-            <Button asChild size="lg" variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20"><Link to="/contact">Contact us</Link></Button>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-8 items-center">
+            {[
+              "Ministry of Health",
+              "NDA Uganda",
+              "Allied Health Council",
+              "UNHRL",
+              "WHO",
+              "Pharmacy Society",
+            ].map((p) => (
+              <div
+                key={p}
+                className="flex h-16 items-center justify-center grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+              >
+                <span className="text-center font-bold text-xs text-primary uppercase tracking-tight leading-tight px-2">
+                  {p}
+                </span>
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* CTA BANNER */}
+      <section aria-label="Newsletter signup" className="bg-gradient-primary py-16">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Get the Latest Updates by Subscribing to Our Newsletter
+          </h2>
+          <p className="text-white/75 mb-8 max-w-xl mx-auto">
+            Stay informed about CPD events, policy changes, and professional opportunities across Uganda.
+          </p>
+          <form
+            className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+            onSubmit={(e) => e.preventDefault()}
+            aria-label="Newsletter subscription form"
+          >
+            <label htmlFor="newsletter-email" className="sr-only">
+              Email address
+            </label>
+            <input
+              id="newsletter-email"
+              type="email"
+              placeholder="Enter your email address"
+              autoComplete="email"
+              className="flex-1 bg-white/15 border border-white/25 rounded-full px-5 py-3 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30"
+            />
+            <button
+              type="submit"
+              className="bg-white text-primary font-semibold px-7 py-3 rounded-full text-sm hover:bg-white/90 transition-all shrink-0"
+            >
+              Subscribe
+            </button>
+          </form>
         </div>
       </section>
     </>
